@@ -1,0 +1,31 @@
+{
+  "name": "bhagvadgitadb",
+  "version": "1.0.0",
+  "description": "A place to store all the utilities for turso.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/K0MPLEXWorksTogether/BhagvadGitaDB.git"
+  },
+  "keywords": [
+    "turso",
+    "database",
+    "express",
+    "SQL"
+  ],
+  "author": "Abhiram Mangipudi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/K0MPLEXWorksTogether/BhagvadGitaDB/issues"
+  },
+  "homepage": "https://github.com/K0MPLEXWorksTogether/BhagvadGitaDB#readme",
+  "dependencies": {
+    "@libsql/client": "^0.15.0",
+    "basic-auth": "^2.0.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

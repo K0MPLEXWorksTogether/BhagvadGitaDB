@@ -255,7 +255,7 @@ app.get("/query", async (req, res) => {
     } else if (randomStatus) {
       return res.status(200).json({ usertype: "random" });
     } else {
-        return res.status(200.json({usertype: "does not exist"});
+      return res.status(200).json({usertype: "does not exist"});
     }
   } catch (err) {
     console.error("Error occured in /query: ", err);

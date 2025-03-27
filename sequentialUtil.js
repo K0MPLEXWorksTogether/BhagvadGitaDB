@@ -109,6 +109,24 @@ async function incrementCompleted(username) {
   }
 }
 
+async function queryUserSequential(username) {
+  const queryUserSequentialQuery = `SELECT COUNT(username) as count FROM sequentialUser WHERE username = ?;`;
+
+  try {
+    const response = await turso.execute(queryUserSequentialQuery, [username]);
+    const existance = response.rows[0].count;
+
+    if (existance) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log("Could not query for user: ", err);
+    return "error";
+  }
+}
+
 module.exports = {
   createSequentialTable,
   updateTimeSequential,
@@ -116,4 +134,5 @@ module.exports = {
   readCompleted,
   deleteSequential,
   insertSequential,
+  queryUserSequential
 };

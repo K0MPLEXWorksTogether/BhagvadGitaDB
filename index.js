@@ -8,12 +8,14 @@ const {
   readCompleted,
   deleteSequential,
   insertSequential,
+  queryUserSequential,
 } = require("./sequentialUtil.js");
 const {
   createRandomTable,
   insertRandom,
   deleteRandom,
   updateTimeRandom,
+  queryUserRandom,
 } = require("./randomUtil.js");
 
 const app = express();
@@ -44,7 +46,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.status(200).json({
     message:
-      "Welcome to the API. Available routes are /create, /incrementCompleted, /updateTime, /delete, /readCompleted",
+      "Welcome to the API. Available routes are /create, /incrementCompleted, /updateTime, /delete, /readCompleted, /query",
   });
 });
 
@@ -190,11 +192,9 @@ app.post("/updateTime", async (req, res) => {
     const { username, usertype, time } = req.body;
 
     if (!username || !usertype || !time) {
-      return res
-        .status(400)
-        .json({
-          message: "Username, usertype or time not passed as a parameter.",
-        });
+      return res.status(400).json({
+        message: "Username, usertype or time not passed as a parameter.",
+      });
     }
 
     if (usertype !== "sequential" && usertype !== "random") {
@@ -229,6 +229,34 @@ app.post("/updateTime", async (req, res) => {
     }
   } catch (err) {
     console.error("Error occured in /updateTime: ", err);
+    return res.status(500).json({ message: "An unexpected error occured." });
+  }
+});
+
+app.get("/query", async (req, res) => {
+  try {
+    const username = req.query.username;
+
+    if (!username) {
+      return res
+        .status(400)
+        .json({ message: "Username not passed as parameter." });
+    }
+
+    const randomStatus = await queryUserRandom(username);
+    const sequentialStatus = await queryUserSequential(username);
+
+    if (randomStatus === "error" || sequentialStatus === "error") {
+      return res.status(500).json({ message: "An unexpected error occured." });
+    }
+
+    if (sequentialStatus) {
+      return res.status(200).json({ usertype: "sequential" });
+    } else {
+      return res.status(200).json({ usertype: "random" });
+    }
+  } catch (err) {
+    console.error("Error occured in /query: ", err);
     return res.status(500).json({ message: "An unexpected error occured." });
   }
 });

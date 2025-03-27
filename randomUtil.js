@@ -66,9 +66,28 @@ async function deleteRandom(username) {
   }
 }
 
+async function queryUserRandom(username) {
+  const queryUserQuery = `SELECT COUNT(username) as count FROM randomUser WHERE username = ?;`;
+
+  try {
+    const result = await turso.execute(queryUserQuery, [username]);
+    const existance = result.rows[0].count;
+
+    if (existance) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error("Could not query for user: ", err);
+    return "error";
+  }
+}
+
 module.exports = {
-  createRandomTable, 
+  createRandomTable,
   insertRandom,
   deleteRandom,
-  updateTimeRandom
-}
+  updateTimeRandom,
+  queryUserRandom
+};

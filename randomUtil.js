@@ -33,7 +33,7 @@ async function insertRandom(username, time, chatId) {
     `;
 
   try {
-    await turso.execute(insertRandomQuery, [username, time, chat]);
+    await turso.execute(insertRandomQuery, [username, time, chatId]);
     return true;
   } catch (err) {
     console.error("Could not insert record: ", err);

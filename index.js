@@ -79,7 +79,7 @@ app.post("/create", async (req, res) => {
 
     if (!username || !usertype || !time || !chatID) {
       return res.status(400).json({
-        message: "Username, usertype, or time not passed as a parameter.",
+        message: "Username, usertype, time, or chatID not passed as a parameter.",
       });
     }
 

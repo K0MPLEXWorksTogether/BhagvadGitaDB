@@ -13,6 +13,7 @@ async function createRandomTable() {
         CREATE TABLE IF NOT EXISTS randomUser (
             username TEXT,
             time TEXT,
+            chatId TEXT,
 
             CONSTRAINT pk_randomUser PRIMARY KEY (username)
         );
@@ -26,13 +27,13 @@ async function createRandomTable() {
   }
 }
 
-async function insertRandom(username, time) {
+async function insertRandom(username, time, chatId) {
   const insertRandomQuery = `
-        INSERT INTO randomUser (username, time) VALUES (?, ?);
+        INSERT INTO randomUser (username, time, chatId) VALUES (?, ?, ?);
     `;
 
   try {
-    await turso.execute(insertRandomQuery, [username, time]);
+    await turso.execute(insertRandomQuery, [username, time, chatId]);
     return true;
   } catch (err) {
     console.error("Could not insert record: ", err);

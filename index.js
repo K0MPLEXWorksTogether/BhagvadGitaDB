@@ -75,9 +75,9 @@ app.get("/readCompleted", async (req, res) => {
 
 app.post("/create", async (req, res) => {
   try {
-    const { username, usertype, time } = req.body;
+    const { username, usertype, time, chatID } = req.body;
 
-    if (!username || !usertype || !time) {
+    if (!username || !usertype || !time || !chatID) {
       return res.status(400).json({
         message: "Username, usertype, or time not passed as a parameter.",
       });
@@ -90,7 +90,7 @@ app.post("/create", async (req, res) => {
     }
 
     if (usertype === "random") {
-      const status = await insertRandom(username, time);
+      const status = await insertRandom(username, time, chatID);
       if (status) {
         return res
           .status(200)
@@ -101,7 +101,7 @@ app.post("/create", async (req, res) => {
           .json({ message: "An unexpected error occured." });
       }
     } else {
-      const status = await insertSequential(username, time);
+      const status = await insertSequential(username, time, chatID);
       if (status) {
         return res
           .status(200)

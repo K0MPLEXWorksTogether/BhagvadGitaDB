@@ -14,6 +14,7 @@ async function createSequentialTable() {
             username TEXT,
             time TEXT,
             completed INT DEFAULT 0,
+            chatID TEXT,
 
             CONSTRAINT max_value_check CHECK (completed <= 683),   
             CONSTRAINT pk_sequentialUser PRIMARY KEY (username)
@@ -28,13 +29,13 @@ async function createSequentialTable() {
   }
 }
 
-async function insertSequential(username, time) {
+async function insertSequential(username, time, chatID) {
   const insertSequentialQuery = `
-        INSERT INTO sequentialUser (username, time) VALUES (?, ?);
+        INSERT INTO sequentialUser (username, time, chatID) VALUES (?, ?, ?);
     `;
 
   try {
-    await turso.execute(insertSequentialQuery, [username, time]);
+    await turso.execute(insertSequentialQuery, [username, time, chatID]);
     return true;
   } catch (err) {
     console.error("Could not insert record: ", err);

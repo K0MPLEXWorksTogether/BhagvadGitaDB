@@ -128,6 +128,18 @@ async function queryUserSequential(username) {
   }
 }
 
+async function readTableSeq() {
+  const readTableQuery = `SELECT * FROM sequentialUser;`;
+
+  try {
+    const result = await turso.execute(readTableQuery);
+    return result.rows;
+  } catch (err) {
+    console.error("Could not read the table: ".err);
+    return [];
+  }
+}
+
 module.exports = {
   createSequentialTable,
   updateTimeSequential,
@@ -135,5 +147,6 @@ module.exports = {
   readCompleted,
   deleteSequential,
   insertSequential,
-  queryUserSequential
+  queryUserSequential,
+  readTableSeq,
 };

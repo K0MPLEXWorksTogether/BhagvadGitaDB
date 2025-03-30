@@ -9,6 +9,7 @@ const {
   deleteSequential,
   insertSequential,
   queryUserSequential,
+  readTableSeq,
 } = require("./sequentialUtil.js");
 const {
   createRandomTable,
@@ -16,6 +17,7 @@ const {
   deleteRandom,
   updateTimeRandom,
   queryUserRandom,
+  readTableRandom,
 } = require("./randomUtil.js");
 
 const app = express();
@@ -46,7 +48,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.status(200).json({
     message:
-      "Welcome to the API. Available routes are /create, /incrementCompleted, /updateTime, /delete, /readCompleted, /query",
+      "Welcome to the API. Available routes are /create, /incrementCompleted, /updateTime, /delete, /readCompleted, /query, /chatID, /table",
   });
 });
 
@@ -79,7 +81,8 @@ app.post("/create", async (req, res) => {
 
     if (!username || !usertype || !time || !chatID) {
       return res.status(400).json({
-        message: "Username, usertype, time, or chatID not passed as a parameter.",
+        message:
+          "Username, usertype, time, or chatID not passed as a parameter.",
       });
     }
 
@@ -255,10 +258,39 @@ app.get("/query", async (req, res) => {
     } else if (randomStatus) {
       return res.status(200).json({ usertype: "random" });
     } else {
-      return res.status(200).json({usertype: "does not exist"});
+      return res.status(200).json({ usertype: "does not exist" });
     }
   } catch (err) {
     console.error("Error occured in /query: ", err);
+    return res.status(500).json({ message: "An unexpected error occured." });
+  }
+});
+
+app.get("/table", async (req, res) => {
+  try {
+    const usertype = req.query.usertype;
+
+    if (!usertype) {
+      return res
+        .status(400)
+        .json({ message: "Username or usertype not passed as a parameter." });
+    }
+
+    if (usertype !== "sequential" && usertype !== "random") {
+      return res
+        .status(400)
+        .json({ message: "Usertype must be 'sequential' or 'random'." });
+    }
+
+    if (usertype == "random") {
+      const randomTable = await readTableRandom();
+      return res.status(200).json({ data: randomTable });
+    } else {
+      const seqTable = await readTableSeq();
+      return res.status(200).json({ data: seqTable });
+    }
+  } catch (err) {
+    console.error("Error occured in /table: ", err);
     return res.status(500).json({ message: "An unexpected error occured." });
   }
 });

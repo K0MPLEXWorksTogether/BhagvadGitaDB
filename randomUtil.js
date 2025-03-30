@@ -85,10 +85,23 @@ async function queryUserRandom(username) {
   }
 }
 
+async function readTableRandom() {
+  const readTableQuery = `SELECT * FROM randomUser;`;
+
+  try {
+    const result = await turso.execute(readTableQuery);
+    return result.rows;
+  } catch (err) {
+    console.error("Could not read the table: ".err);
+    return [];
+  }
+}
+
 module.exports = {
   createRandomTable,
   insertRandom,
   deleteRandom,
   updateTimeRandom,
-  queryUserRandom
+  queryUserRandom,
+  readTableRandom,
 };
